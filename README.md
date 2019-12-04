@@ -8,8 +8,8 @@ Just download the .c file and type "./DnD_Initiative". No need to install anythi
 # Uninstall
 Delete the .c file. Nothing was installed, so nothing needs to be uninstalled.
 
-# License
-Do whatever you want with the code/software, just credit me if you decide to publish anything related to my code.
+# (Un)License
+Do whatever you want with the code/software, it's public domain (but crediting me if you use my work is still cool s2).
 
 # TO-DO
 - Comment the code (sorry)
