@@ -10,3 +10,9 @@ Delete the .c file. Nothing was installed, so nothing needs to be uninstalled.
 
 # License
 Do whatever you want with the code/software, just credit me if you decide to publish anything related to my code.
+
+# TO-DO
+- Comment the code (sorry)
+- Change all variables' names to English
+- Language select
+- Help screen
