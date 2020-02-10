@@ -1,3 +1,5 @@
+/* D&D Initiative, written in C by Vitor Maduro. 2016-2020 */
+
 #include "stdio.h"
 #include "stdlib.h"
 #include <ctype.h>
@@ -12,11 +14,13 @@
 #define KWHT "\x1B[37m"      // Branco
 #define RESET "\x1B[0m"      // Reset
 
+/* Struct to save each creature's current and max HP values */
 typedef struct HPstruct {
     int currentHP;
     int maxHP;
 } HP;
 
+/* Struct to save each creature */
 typedef struct CreatureStruct {
     char nome[40];
     char anotacoes[100];
@@ -32,6 +36,7 @@ int x;
 int turno = -1;
 Creature creatures[40];
 
+/* Print the list showing each creature, with names, HP, initiative, annotations, etc. */
 void PrintGraph() {
     printf("\033[2J\033[1;1H");
     printf("----------------------------------------------------\n");
@@ -68,6 +73,7 @@ void PrintGraph() {
 	printf("\n");
 }
 
+/* Uses the Bubble Sort method to sort the creatures by initiative (it's not fast, but you'll probably never have to use it to sort more than 30 creatures, so the performance hit is imperceptible) */
 void BubbleSortCreatures() {
     int controle = 1;
     int inicTroca;
@@ -100,6 +106,9 @@ void BubbleSortCreatures() {
     }
 }
 
+/* Generates a pseudo-random number to simulate dice
+   Input: int a (number of dice), int b (number of faces)
+   Output: an pseudo-random int based on aDb (5d4, for example)*/
 int RollDice(int a, int b) {
 	int resultado = 0;
 	int dado;
@@ -113,6 +122,9 @@ int RollDice(int a, int b) {
 	return resultado;
 }
 
+/* Transforms a string in a value to determine HP values
+   Input: char diceHP (string representing the HP value, like "10/50" or "3d10+5"
+   Output: an int corresponding to the received string*/
 int DiceExpressionToHp(char diceHP[], int current) {
     int hpValue = 0;
     int dice1 = 0;
@@ -164,6 +176,7 @@ int DiceExpressionToHp(char diceHP[], int current) {
     return hpValue + soma;
 }
 
+/* Saves the current state in a file */
 void Save(void) {
     int x;
     FILE *pFile;
@@ -194,6 +207,9 @@ void Save(void) {
     fclose(pFile);
 }
 
+/* Loads a previous state from a file
+   Input: char fileToLoad (name of the file to be read)
+   Output: 1, if the load is successful. -1 otherwise*/
 int Load(char fileToLoad[]) {
     int x;
     char fileName[30];
@@ -231,6 +247,9 @@ int Load(char fileToLoad[]) {
     return 1;
 }
 
+/* Checks if a string representing a HP value is valid (e.g. 10, 5d10+2, and 13/45 are all valid. 12h is not)
+   Input: char stringHP (the string to be checked)
+   Output: 1, if the string is valid. -1 otherwise*/
 int IsHpValid(char stringHP[]) {
     int z;
 
@@ -240,13 +259,16 @@ int IsHpValid(char stringHP[]) {
             stringHP[z] != '7' && stringHP[z] != '8' && stringHP[z] != '9' && 
             stringHP[z] != '0' && stringHP[z] != 'd' && stringHP[z] != '/' &&
             stringHP[z] != '+') {
-                return 0;
+                return -1;
             }
     }
 
     return 1;
 }
 
+/* Reads a string and defines the value of initative based on it
+   Input: char stringInit (string representing the initative)
+   Output: the initative, if the string is valid. -1 otherwise*/
 int SetInitiative(char stringInit[]) {
     int init = 0;
 
@@ -267,6 +289,9 @@ int SetInitiative(char stringInit[]) {
     }
 }
 
+/* Reads a string and defines the values of current and max HP
+   Input: char stringHP (the string representing the HP to be set)
+   Output: struct HP, with the current and max values. Both values are set to -1 if the string is not valid*/
 HP SetHP(char stringHP[]) {
     int y;
     int diceReturn;
@@ -311,6 +336,9 @@ HP SetHP(char stringHP[]) {
 
 }
 
+/* Adds one or more creatures to the combat
+   Input: int numberOfCreatures (number of creatures of the same type to be added), char creatureName (name of the creatures), int current
+   Output: an int representing the number of creatures successfully added*/
 int AddCreature(int numberOfCreatures, char creatureName[], int current) {
     int addedCreatures = 0;
     int y;
@@ -415,7 +443,7 @@ int main(int argc, char *argv[]) {
     int turnDecided = 0;
     int creaturesToAdd = 1;
     char hpTest[10];
-	char decisao = 'o';         //Usada para verificar o que o usuário quer fazer
+    char decisao = 'o';         //Usada para verificar o que o usuário quer fazer
     char nomeReserva[40];
     char dadoJogado[10];
     char stringTeste[20];
